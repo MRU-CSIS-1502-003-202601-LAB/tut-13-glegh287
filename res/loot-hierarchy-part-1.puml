@@ -1,0 +1,39 @@
+@startuml loot-part-1
+title Lab 12 - RPG Loot Hierarchy (In-Memory)
+
+skinparam classAttributeIconSize 0
+
+abstract class Loot {
+  - name : String
+  - rarity : String
+  + Loot(name : String, rarity : String)
+  + getName() : String
+  + getRarity() : String
+  + {abstract} getEffectDescription() : String
+}
+
+class Weapon {
+  - damage : int
+  + Weapon(name : String, rarity : String, damage : int)
+  + getEffectDescription() : String
+}
+
+class Consumable {
+  - restoreAmount : int
+  + Consumable(name : String, rarity : String, restoreAmount : int)
+  + getEffectDescription() : String
+}
+
+Loot <|-- Weapon
+Loot <|-- Consumable
+
+note left of Loot::getEffectDescription
+  Abstract methods enforce a contract.
+  Subclasses MUST implement these.
+end note
+
+note right of Loot
+  Loot cannot be instantiated directly.
+end note
+
+@enduml

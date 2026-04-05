@@ -1,0 +1,24 @@
+{
+    "customizations": {
+        // Configure properties specific to VS Code.
+        "vscode": {
+            // Set *default* container specific settings.json values on container create.
+            "settings": {
+                "remoteHub.commitDirectlyWarning": "off",
+                "extensions.ignoreRecommendations": true
+            },
+            // Add the IDs of extensions you want installed when the container is created.
+            "extensions": [
+                "redhat.java@1.51.0",
+                "vscjava.vscode-java-debug@0.58.4",
+                "vscjava.vscode-java-test@0.44.0",
+                "vscjava.vscode-java-dependency@0.27.0",
+                "ms-vscode.live-server@0.4.16",
+                "jebbs.plantuml@2.18.1",
+                "well-ar.plantuml@2.17.6"
+            ]
+        }
+    },
+    "postCreateCommand" : "sudo add-apt-repository --yes universe && sudo apt update --allow-insecure-repositories && sudo apt-get --yes --force-yes install graphviz"
+
+}

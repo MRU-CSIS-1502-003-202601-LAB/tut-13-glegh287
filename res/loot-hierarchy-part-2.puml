@@ -1,0 +1,53 @@
+@startuml loot-part-2
+title Tut 13 - RPG Loot Hierarchy (File Persistence)
+
+skinparam classAttributeIconSize 0
+
+class LootManager {
+  - inventory : List<Loot>
+  - LootManager()
+  + {static} load(filePath: String) : LootManager
+  + displayInventory() : void
+  + save(filePath: String) : void
+  + add(loot: Loot) void
+}
+
+abstract class Loot {
+  - name : String
+  - rarity : String
+  + Loot(name : String, rarity : String)
+  + getName() : String∂
+  + getRarity() : String
+  + {abstract} getEffectDescription() : String
+  + {abstract} asCsvRecord() : String∂
+}
+
+class Weapon {
+  - damage : int
+  + Weapon(name : String, rarity : String, damage : int)
+  + getEffectDescription() : String
+  + asCsvRecord() : String
+}
+
+class Consumable {
+  - restoreAmount : int
+  + Consumable(name : String, rarity : String, restoreAmount : int)
+  + getEffectDescription() : String
+  + asCsvRecord() : String
+}
+
+LootManager "1" o--> "*" Loot
+Loot <|-- Weapon
+Loot <|-- Consumable
+
+note right of LootManager::load
+  The underline means that load 
+  is static.
+end note
+
+note left of LootManager
+  Only this class touches the Scanner
+  and PrintWriter.
+end note
+
+@enduml
