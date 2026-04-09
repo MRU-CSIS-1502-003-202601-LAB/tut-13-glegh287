@@ -1,11 +1,11 @@
 package main;
 
 import java.util.ArrayList;
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.util.Scanner;
 
-/**
- * Manages the inventory of RPG Loot.
- */
 public class LootManager {
     private ArrayList<Loot> inventory;
 
@@ -13,17 +13,47 @@ public class LootManager {
         this.inventory = new ArrayList<>();
     }
 
-    /**
-     * Polymorphically displays all items in the inventory.
-     */
+    public void add(Loot loot) {
+        inventory.add(loot);
+    }
+
+    public static LootManager load(String filePath) throws FileNotFoundException {
+        LootManager manager = new LootManager();
+        Scanner scanner = new Scanner(new File(filePath));
+
+        if (scanner.hasNextLine()) scanner.nextLine(); // skip header row
+
+        while (scanner.hasNextLine()) {
+            String line = scanner.nextLine().trim();
+            if (line.isEmpty()) continue;
+            String[] fields = line.split(",");
+            Loot loot = LootFactory.create(fields);
+            if (loot != null) manager.add(loot);
+        }
+
+        scanner.close();
+        return manager;
+    }
+
+    public void save(String filePath) throws FileNotFoundException {
+        PrintWriter writer = new PrintWriter(new File(filePath));
+        writer.println("type,name,rarity,value");
+
+        for (Loot item : inventory) {
+            writer.println(item.asCsvRow());
+        }
+
+        writer.close();
+    }
+
     public void displayInventory() {
         System.out.println();
         System.out.println("--- Current Inventory ---");
         for (Loot item : inventory) {
             System.out.println(item.getName() + " [" + item.getRarity() + "] - " +
-            item.getEffectDescription());
+                    item.getEffectDescription());
         }
         System.out.println("-------------------------");
         System.out.println();
     }
-}
+} 
